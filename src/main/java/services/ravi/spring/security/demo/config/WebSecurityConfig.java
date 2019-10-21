@@ -27,8 +27,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+            .antMatchers("/public").permitAll()  // allow public access to the public page
             .anyRequest().authenticated() // any request coming to our app must be authenticated
-                .and() // Adding new Rule.
+            .and() // Adding new Rule.
                 .formLogin()
                     .loginPage("/login") // The request mapping for the login form
                     .loginProcessingUrl("/authenticateTheUser") // The URL to process the Login.
