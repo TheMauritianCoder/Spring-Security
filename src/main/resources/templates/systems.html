@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Demo Spring Security App</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+</head>
+
+<body>
+<div class="container">
+    <h1>This is the Admin Page</h1>
+    <form th:action="@{/logout}" method="post">
+        <button class="btn btn-warning">Logout</button>
+    </form>
+</div>
+</body>
+
+</html>

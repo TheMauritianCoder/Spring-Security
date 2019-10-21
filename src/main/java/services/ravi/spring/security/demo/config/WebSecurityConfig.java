@@ -20,14 +20,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication().withUser("employee").password(bCryptPasswordEncoder().encode("employeePass")).roles("EMPLOYEE");
-        auth.inMemoryAuthentication().withUser("manager").password(bCryptPasswordEncoder().encode("managerPass")).roles("MANAGER");
-        auth.inMemoryAuthentication().withUser("admin").password(bCryptPasswordEncoder().encode("adminPass")).roles("ADMIN");
+        auth.inMemoryAuthentication().withUser("manager").password(bCryptPasswordEncoder().encode("managerPass")).roles("EMPLOYEE","MANAGER");
+        auth.inMemoryAuthentication().withUser("admin").password(bCryptPasswordEncoder().encode("adminPass")).roles("EMPLOYEE","ADMIN");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
             .antMatchers("/public").permitAll()  // allow public access to the public page
+            .antMatchers("/").hasRole("EMPLOYEE")
+            .antMatchers("/leaders/**").hasRole("MANAGER")
+            .antMatchers("/systems/**").hasRole("ADMIN")
             .anyRequest().authenticated() // any request coming to our app must be authenticated
             .and() // Adding new Rule.
                 .formLogin()
@@ -36,7 +39,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll() // Every one can access the Login Form
                 .and() // Add new Rule.
                 .logout().permitAll() // Allow logout support (Default URL ==> /logout
-
+                .and()
+                .exceptionHandling()
+                    .accessDeniedPage("/access-denied") // When we have an access denied we will be redirected to that page.
         ;
     }
 }
